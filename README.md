@@ -1,2 +1,2 @@
 # Python
- Repositório das Aulas e projetos desenvolvidos em Python
+ Repositório das Aulas, Projetos e Desafios desenvolvidos em Python
