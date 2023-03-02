@@ -1,2 +1,2 @@
 # Python
- Repositório dos aquivos do curso e projetos desenvolvidos
+ Repositório das Aulas e projetos desenvolvidos em Python
