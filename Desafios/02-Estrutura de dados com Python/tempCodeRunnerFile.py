@@ -1,0 +1,1 @@
+N = int(input("Digite o nível de energia: "))
