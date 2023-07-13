@@ -81,10 +81,10 @@ def sacar(saldo, valor, extrato, limite, numero_saques, limite_saques):
 
 def exibir_extrato(saldo, extrato):
     # Função para exibir o extrato da conta
-    print("\n =============== EXTRATO ===============")
+    print("\n ========== EXTRATO ==========")
     print("Não houve movimentação até o momento!" if not extrato else '\n'.join(extrato))
     print(f"\nSaldo:\t\tR$ {saldo:.2f}")
-    print("========================================")
+    print("================================")
 
 
 def criar_usuario(usuarios):
