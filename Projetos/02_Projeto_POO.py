@@ -1,40 +1,3 @@
-'''
-Objetivo Geral:
-Separar as funções existentes de saque, depósito e extrato em funções. Criar duas novas funções: cadastro de usuários: (clientes) e cadastrar conta bancária.
-
-DESAFIO:
-Precisamos deixar nosso código mais modularizado, para isso vamos criar funções para as operações existentes: sacar, depositar e visualizar extrato. Além disso, para a versão 2 do nosso sistema precisamos criar duas novas funções: criar usuários (cliente do banco) e criar conta corrente (vincular com usuário).
-
-Separando em Funções:
-Devemos criar funções para todas as operações do sistema. Para exercitar tudo o que aprendemos neste módulo, cada função vai ter uma regra na passagem de argumentos. O retorno e a forma como serão chamadas, pode ser definida por você da forma que achar melhor.
-
-Saque:
-A função saque deve receber os argumentos apenas por nome (keyword only). Sugestão de argumentos: saldo, valor, extrato, limite, numero_saques, limite_saques. Sugestão de retorno: saldo e extrato.
-
-Depósito:
-A função depósito deve receber os argumentos apenas por posição (positional only). Sugestão de argumentos: saldo, valor, extrato. Sugestão de retorno: saldo e extrato.
-
-Extrato:
-A função extrato deve receber os argumentos por posição e nome (positional only e keyword only). Argumentos posicionais: saldo; argumentos nomeados: extrato.
-
-Novas Funções:
-Precisamos criar duas novas funções: criar usuário e criar conta corrente. Fique a vontade para adicionar mais funções, exemplo: listar contas.
-
-Criar Usuário (Cliente):
-O programa deve armazenar os usuários em uma lista, um usuário é composto por: nome, data de nascimento, CPF e endereço. O endereço é uma String com o formato: logradouro, nro, bairro, cidade/sigla estado. Deve ser armazenado somente os números do CPF. Não podemos cadastrar 2 usuários com o mesmo CPF.
-
-Criar conta corrente:
-O programa deve armazenar contas em uma lista, uma conta é composta por: agência, número da conta e usuário. O número da conta é sequencial, iniciando em 1. O número da agência é fixo: “0001”. O usuário pode ter mais de uma conta, mas uma conta pertence a somente um usuário.
-
-Dica:
-Para vincular um usuário a uma conta, filtre a lista de usuários buscando o número do CPF informado para cada usuário da lista.
-
-Desafio extra:
-Após concluir a modelagem das classes e a criação dos métodos. Atualizar os métodos que tratam as opções do menu, para funcionarem com as classes modeladas
-
-'''
-
-
 import textwrap
 from abc import ABC, abstractclassmethod, abstractproperty
 from datetime import datetime
@@ -46,13 +9,13 @@ class Cliente:
         self.contas = []
 
     def realizar_transacao(self, conta, transacao):
-        transacao.resgistrar(conta)
+        transacao.registrar(conta)
 
-    def adicionar_contas(self, conta):
+    def adicionar_conta(self, conta):
         self.contas.append(conta)
 
 
-class PesoaFisica(Cliente):
+class PessoaFisica(Cliente):
     def __init__(self, nome, data_nascimento, cpf, endereco):
         super().__init__(endereco)
         self.nome = nome
@@ -130,7 +93,8 @@ class ContaCorrente(Conta):
 
     def sacar(self, valor):
         numero_saques = len(
-            [transacao for transacao in self.historico.transacoes if transacao["tipo"] == Saques.__name__]
+            [transacao for transacao in self.historico.transacoes if transacao["tipo"]
+                == Saque.__name__]
         )
 
         excedeu_limite = valor > self.limite
@@ -163,7 +127,7 @@ class Historico:
     def transacoes(self):
         return self._transacoes
 
-    def adicionar_transacoes(self, transacao):
+    def adicionar_transacao(self, transacao):
         self._transacoes.append(
             {
                 "tipo": transacao.__class__.__name__,
@@ -214,7 +178,6 @@ class Deposito(Transacao):
             conta.historico.adicionar_transacao(self)
 
 
-# Apresenta todas as opções de transações para o usuário
 
 def menu():
     menu = """\n
@@ -232,7 +195,8 @@ def menu():
 
 
 def filtrar_cliente(cpf, clientes):
-    clientes_filtrados = [cliente for cliente in clientes if cliente.cpf == cpf]
+    clientes_filtrados = [
+        cliente for cliente in clientes if cliente.cpf == cpf]
     return clientes_filtrados[0] if clientes_filtrados else None
 
 
@@ -260,7 +224,7 @@ def depositar(clientes):
     if not conta:
         return
 
-    clinte.realizar_transacao(conta, transacao)
+    cliente.realizar_transacao(conta, transacao)
 
 
 def sacar(clientes):
@@ -278,7 +242,7 @@ def sacar(clientes):
     if not conta:
         return
 
-    clinte.realizar_transacao(conta, transacao)
+    cliente.realizar_transacao(conta, transacao)
 
 
 def exibir_extrato(clientes):
@@ -319,9 +283,11 @@ def criar_cliente(clientes):
 
     nome = input("Informe o nome completo: ")
     data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
-    endereco = input("Informe o endereço (logadouro, nro - bairro - cidade/sigla estado): ")
+    endereco = input(
+        "Informe o endereço (logadouro, nro - bairro - cidade/sigla estado): ")
 
-    cliente = PesoaFisica(nome=nome, data_nascimento=data_nascimento, cpf=cpf, endereco=endereco)
+    cliente = PessoaFisica(
+        nome=nome, data_nascimento=data_nascimento, cpf=cpf, endereco=endereco)
 
     clientes.append(cliente)
 
@@ -364,23 +330,23 @@ def main():
 
         elif opcao == "3":
             exibir_extrato(clientes)
-        
-        elif opcao == "4":
-            numero_conta = len(contas) + 1
-            criar_conta(numero_conta, clientes, contas)
 
         elif opcao == "5":
             criar_cliente(clientes)
 
+        elif opcao == "4":
+            numero_conta = len(contas) + 1
+            criar_conta(numero_conta, clientes, contas)
+
         elif opcao == "6":
             listar_contas(contas)
 
-                
         elif opcao == "0":
             break
 
         else:
             print(
                 "\n@@@ Operação inválida, por favor selecione novamente a operação desejada. @@@")
+
 
 main()
